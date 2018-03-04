@@ -10,6 +10,7 @@ import com.spring.model.User;
 @Repository
 public class UserDao {
 	private static List<User> list = null;
+	User user;
 	static{
 		list = new ArrayList<User>();
 		list.add(new User("KK", 30, "kk.cs@gmail.com", "India"));
@@ -22,5 +23,18 @@ public class UserDao {
 	public void addUser(User user) {
 		// TODO Auto-generated method stub
 		list.add(user);
+	}
+	public User findOne(String name) {
+		for(User user : list)
+		{
+			if(user.getName().equals(name))
+			{
+				return user;
+			}
+		}
+		return user;
+	}
+	public void removeUser(User user) {
+		list.remove(user);
 	}
 }

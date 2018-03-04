@@ -14,13 +14,14 @@ public class User {
 	
 	private String name;
 	
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", age=" + age + ", email=" + email + ", country=" + country + "]";
+	}
 	private int age;
 	private String email;
 	private String country;
-	public User()
-	{
-		
-	}
+	
 	public User(String name, int age, String email, String country) {
 		super();
 		this.name = name;

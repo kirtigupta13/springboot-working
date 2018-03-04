@@ -8,23 +8,75 @@
 		<h2 align="center">User Management Application</h2>
 		<a href="/register">back</a>
     <div align="center">
-        <table border="1" cellpadding="5">
+    <div th:switch="${mode}"> 
+  <p th:case="'VIEW_USER'">
+  
+  <table border="1" cellpadding="5">
             <caption><h3>List of Users</h3></caption>
             <tr>
                 <th>Name</th>
                 <th>Age</th>
                 <th>Email</th>
                 <th>Country</th>
+                 <th>edit</th>
+                  <th>delete</th>
             </tr>
             <tr th:each="user,iterationStatus  : ${userList}">
       	<td  th:value="${user.name}"> <span th:text ="${user.name}"></span></td>
         <td  th:value="${user.age}"><span th:text ="${user.age}"></span></td>
         <td th:value="${user.email}"><span th:text ="${user.email}"></span></td>
         <td th:value="${user.country}"><span th:text ="${user.country}"></span></td>
-       
+       <td><a th:href="@{'/updateUser?name='+${user.name}}">Edit/Update</a></td>
+       <td><a th:href="@{'/delete?name='+${user.name}}">delete</a></td>
       </tr>
            
         </table>
+  
+  </p>
+  <p th:case="UPDATE_USER">
+	<form name="registerSuccess" id ="registerSuccess" th:action="@{/registerSuccess}" 	 method="post">
+		<table>
+<tr>
+<td><input type="hidden" name="name" id="name" th:value="${name}"/></td></tr>
+			<tr>
+				<td>User Name</td>
+				<td><input type="text" name="name"  th:value="${updateuser.name}" /></td>
+			</tr>
+
+			<tr>
+				<td>Email</td>
+				<td><input type="text" name="email" th:value="${updateuser.email}"/></td>
+			</tr>
+
+
+			<tr>
+				<td>Age</td>
+				<td><input type="text" name="age" th:value="${updateuser.age}"/></td>
+			</tr>
+
+			<tr>
+				<td>Country</td>
+				<td><select name="country">
+				<option th:value="${updateuser.country}" th:text="${updateuser.country}"></option>
+						<option value="India">India</option>
+						<option value="US">US</option>
+						<option value="Other">Other</option>
+				</select></td>
+			</tr>
+
+			<tr>
+				<td><input type="submit" value="Register"/></td>
+			</tr>
+
+
+		</table>
+	</form>
+
+</p>
+  <p th:case="DELETE_USER">User is some other thing</p> 
+  <p th:case="*">User is some other thing</p> 
+</div>
+        
     </div>	
 </body>
 </html>
