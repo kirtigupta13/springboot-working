@@ -3,8 +3,11 @@ package com.spring.controller;
 import java.util.List;
 
 import javax.management.RuntimeErrorException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.UserList;
 import org.springframework.stereotype.Controller;
@@ -14,8 +17,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.exception.ExceptionController;
 import com.spring.model.User;
 import com.spring.service.PersonService;
 
@@ -28,7 +34,10 @@ import com.spring.service.PersonService;
  *
  */   
 @Controller
+@SessionAttributes("name")
 public class UserController {
+	
+	private Log logger = LogFactory.getLog(ExceptionController.class);
 
 	@Autowired
 	private PersonService personService;
@@ -53,6 +62,7 @@ public class UserController {
 	@RequestMapping(value = "/showListOfUser", method = RequestMethod.GET)
 	public ModelAndView showListOfUser(ModelAndView modelAndView) {
 		modelAndView.setViewName("userList");
+
 		List<User> userList = personService.getUserList();
 		modelAndView.addObject("userList", userList);
 		modelAndView.addObject("mode", "VIEW_USER");
@@ -62,6 +72,8 @@ public class UserController {
 
 	@RequestMapping(value = "/updateUser", method = RequestMethod.GET)
 	public ModelAndView updateListOfUser(@RequestParam("name") String name, ModelAndView modelAndView) {
+		
+//		throw new RuntimeException("DUMMY");
 		User user = personService.findOneUser(name);
 		System.out.println(user);
 		System.out.println(user.getName());
@@ -79,10 +91,12 @@ public class UserController {
 		modelAndView.addObject("mode", "VIEW_USER");
 		return "redirect:/showListOfUser";
 	}
-	/*
-	 * @ExceptionHandler(value=RuntimeException.class) public String
-	 * exceptionHanlder(){ return "RuntimeException"; }
-	 */
+	
+	@ExceptionHandler(value = Exception.class)
+	public String handleError(HttpServletRequest req, Exception exception) {
+		logger.error("Request: " + req.getRequestURL() + " raised " + exception);
+		return "error";
+	}
 
 	@RequestMapping(value = "/registerSuccess", method = RequestMethod.POST)
 	public String submitPage(@RequestParam("name") String userName, @RequestParam("country") String country,

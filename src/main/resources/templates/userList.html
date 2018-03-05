@@ -23,6 +23,10 @@
 </nav>
 		<h2 align="center">User Management Application</h2>
 		<a href="/register">back</a>
+		<div>
+		<span>hello!</span>
+		<span th:text ="${name}" th:value ="${name}"></span>
+		</div>
     <div align="center">
     <div th:switch="${mode}"> 
   <p th:case="'VIEW_USER'">
